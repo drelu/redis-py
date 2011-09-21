@@ -211,14 +211,15 @@ class StrictRedis(object):
         should expect a single arguement which is a Pipeline object.
         """
         shard_hint = kwargs.pop('shard_hint', None)
-        with self.pipeline(True, shard_hint) as pipe:
-            while 1:
-                try:
-                    pipe.watch(*watches)
-                    func(pipe)
-                    return pipe.execute()
-                except WatchError:
-                    continue
+        pipe = self.pipeline(True, shard_hint) 
+        #with self.pipeline(True, shard_hint) as pipe:
+        while 1:
+            try:
+                pipe.watch(*watches)
+                func(pipe)
+                return pipe.execute()
+            except WatchError:
+                continue
 
     def lock(self, name, timeout=None, sleep=0.1):
         """
