@@ -255,9 +255,9 @@ class StrictRedis(object):
         except ConnectionError:
             connection.disconnect()
             connection.send_command(*args)
-            return self.parse_response(connection, command_name, **options)
-        finally:
-            pool.release(connection)
+            response = self.parse_response(connection, command_name, **options)        
+        pool.release(connection)
+        return response
 
     def parse_response(self, connection, command_name, **options):
         "Parses a response from the Redis server"
