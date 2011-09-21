@@ -1456,9 +1456,10 @@ class BasePipeline(object):
                                  "one or more keys")
             # otherwise, it's safe to retry since the transaction isn't
             # predicated on any state
-            return execute(conn, stack)
-        finally:
             self.reset()
+            return execute(conn, stack)
+        
+        self.reset()
 
     def watch(self, *names):
         """
